@@ -3,6 +3,7 @@ package com.saar.blog.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
    private	UserRepo userRepo;
+	
+	@Autowired
+	private ModelMapper modelMapper; // This is use for converting User to UserDto and vice versa
 
 	@Override
 	public UserDto addUser(UserDto userDto) {
@@ -77,23 +81,29 @@ public class UserServiceImpl implements UserService {
 	
 	User dtoToUser(UserDto userDto)
 	{
-		User user= new User();
-		user.setId(userDto.getId());
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
-		user.setAbout(userDto.getAbout());
+		// This is normal way to convert data  UserDto To User
+//		User user= new User();
+//		user.setId(userDto.getId());
+//		user.setName(userDto.getName());
+//		user.setEmail(userDto.getEmail());
+//		user.setPassword(userDto.getPassword());
+//		user.setAbout(userDto.getAbout());
+		
+		User user=modelMapper.map(userDto, User.class);
 		return user;
 	}
 	
 	UserDto userToDto(User user)
 	{
-		UserDto ud=new UserDto();
-		ud.setId(user.getId());
-		ud.setName(user.getName());
-		ud.setEmail(user.getEmail());
-		ud.setPassword(user.getPassword());
-		ud.setAbout(user.getAbout());
+		// Change this User data into Dto
+//		UserDto ud=new UserDto();
+//		ud.setId(user.getId());
+//		ud.setName(user.getName());
+//		ud.setEmail(user.getEmail());
+//		ud.setPassword(user.getPassword());
+//		ud.setAbout(user.getAbout());
+		
+		UserDto ud=modelMapper.map(user, UserDto.class);
 		return ud;
 	}
 
