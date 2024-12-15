@@ -18,6 +18,8 @@ import com.saar.blog.payloads.ApiResponse;
 import com.saar.blog.payloads.UserDto;
 import com.saar.blog.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,13 +28,13 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/add")
-	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto) {
 		UserDto createUserDto=  userService.addUser(userDto);
 		return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/update/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable Integer userId) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto,@PathVariable Integer userId) {
 		UserDto update=  userService.updateUser(userDto, userId);
 		return new ResponseEntity<UserDto>(update,HttpStatus.CREATED);
 	}
