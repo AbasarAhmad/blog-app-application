@@ -48,27 +48,32 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostDto updatePost(PostDto postDto, Integer postId) {
-		//Post post=postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "id", postId));
-		
-		return null;
+		Post post=postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "id", postId));
+		post.setTitle(postDto.getTitle());
+		post.setImgName(postDto.getImgName());
+		post.setContent(postDto.getContent());
+		Post updatePost=this.postRepo.save(post);
+		return this.modelMapper.map(updatePost, PostDto.class);
 	}
 
 	@Override
 	public void deletePost(Integer postId) {
-		// TODO Auto-generated method stub
+		Post post=postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "id", postId));
+		postRepo.delete(post);
 
 	}
 
 	@Override
 	public List<PostDto> getAllPost() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Post> posts=postRepo.findAll();
+		List<PostDto>postDtos=posts.stream().map(post->this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		return postDtos;
 	}
 
 	@Override
-	public Post getPostById(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+	public PostDto getPostById(Integer postId) {
+		Post post=postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "id", postId));
+		return this.modelMapper.map(post, PostDto.class);
 	}
 
 	@Override
@@ -82,8 +87,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<PostDto> getPostsByUser(Integer userId) {
 		User user=userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User", "id", userId));
-		List<Post> posts=postRepo.findAllByUser(user);
-		 List<PostDto> postDtos = posts.stream().map(post -> this.modelMapper.map(post, PostDto.class)) // Correct mapping
+	List<Post> posts=postRepo.findAllByUser(user);
+	List<PostDto> postDtos = posts.stream().map(post -> this.modelMapper.map(post, PostDto.class)) 
 		            .collect(Collectors.toList());
 		return postDtos; 
 	}
