@@ -15,5 +15,7 @@ import com.saar.blog.entity.User;
 public interface PostRepo extends JpaRepository<Post, Integer> {
 	List<Post> findAllByUser(User user);
 	List<Post> findByCategory(Category category);
+	
+	List<Post> findByTitleContaining(String title); // Title hamare field ka naam hai
 
 }
