@@ -2,7 +2,6 @@ package com.saar.blog.service;
 
 import java.util.List;
 
-import com.saar.blog.entity.Post;
 import com.saar.blog.payloads.PostDto;
 import com.saar.blog.payloads.PostResponse;
 
