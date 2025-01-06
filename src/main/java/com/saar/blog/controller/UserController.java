@@ -2,6 +2,8 @@ package com.saar.blog.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,6 @@ import com.saar.blog.payloads.ApiResponse;
 import com.saar.blog.payloads.UserDto;
 import com.saar.blog.service.UserService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")

@@ -2,6 +2,8 @@ package com.saar.blog.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.saar.blog.payloads.CategoryDto;
 import com.saar.blog.service.CategoryService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/category")
