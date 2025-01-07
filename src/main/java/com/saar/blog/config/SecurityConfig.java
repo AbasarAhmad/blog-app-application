@@ -3,14 +3,19 @@ package com.saar.blog.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.saar.blog.security.CustomUserDetailService;
+import com.saar.blog.security.JwtAuthenticationEntryPoint;
+import com.saar.blog.security.JwtAuthenticationFilter;
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -19,9 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
 	
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
+	@Autowired
+	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	@Override //HttpSecurity is used to define security-related configurations like authentication, authorization, and CSRF protection
 	protected void configure(HttpSecurity http) throws Exception{
+		/*
+		// This is for Basic authentication
 		http.csrf()//CSRF (Cross-Site Request Forgery) protection is being disabled here.
 		.disable()  //Disabling CSRF can be useful for APIs or non-browser-based clients, but it should be done cautiously because it removes a layer of security.
 		.authorizeHttpRequests() // This method is used to define which HTTP requests need to be authorized (secured).
@@ -29,6 +41,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authenticated() // This means that any HTTP request to the application (like /home, /login, etc.) will require the user to be authenticated (logged in).
 		.and() //It's just a way to combine different configurations in a readable manner.
 		.httpBasic(); //This enables HTTP Basic Authentication. 
+		
+		*/
+		
+		// for JWT  authentication
+		http.csrf()
+		.disable() 
+		.authorizeHttpRequests() 
+		.antMatchers("/api/v1/auth/login").permitAll()
+		.anyRequest()
+		.authenticated() 
+		.and()
+		.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		.and()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 	}
 	
 	/*
@@ -71,6 +101,14 @@ super.configure(auth): यह पेरेंट क्लास की configur
 public PasswordEncoder passwordEncoder(): यह मेथड एक PasswordEncoder (पासवर्ड एन्कोडर) ऑब्जेक्ट लौटाता है, जो पासवर्ड को सुरक्षित तरीके से एन्कोड (encrypt) करने के लिए काम आता है।
 
 return new BCryptPasswordEncoder();: यह BCryptPasswordEncoder क्लास का एक नया ऑब्जेक्ट बनाता है। BCryptPasswordEncoder एक एन्कोडर है जो पासवर्ड को सुरक्षित तरीके से एन्कोड करता है। इसे पासवर्ड को स्टोर करने और उसकी तुलना करने के लिए इस्तेमाल किया जाता है।*/
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+    	return super.authenticationManagerBean();
+    }
+    
+
 }
     
     
