@@ -1,5 +1,8 @@
 package com.saar.blog.payloads;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -30,5 +33,7 @@ public class UserDto {
 	
 	@Size(min=10, message="Write atleast 10 letter in about ")
 	private String about;
+	
+	private Set<RoleDto> roles=new HashSet<>();
 
 }

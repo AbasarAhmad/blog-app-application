@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf()
 		.disable() 
 		.authorizeHttpRequests() 
-		.antMatchers("/api/v1/auth/login").permitAll() // sirf diye huve api ke key se hi delete kiya ja sakta hai 
+		.antMatchers("/api/v1/auth/**").permitAll() // sirf diye huve api ke key se hi delete kiya ja sakta hai 
 		.antMatchers(HttpMethod.GET).permitAll()// get ki sari api bina login ke bhi ho jayegi 
 		.anyRequest()
 		.authenticated() 
